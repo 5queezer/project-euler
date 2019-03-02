@@ -56,13 +56,11 @@ class Word implements iWord {
 }
 
 $nameList = new NameList('p022_names.txt');
-$nameList = $nameList->getSortedList();
 $result = 0;
-for( $position=1, $it = new ArrayIterator($nameList);
-$it->valid();
-$it->next(), ++$position ){
+
+for( $position=1, $it = new ArrayIterator($nameList->getSortedList()); $it->valid(); $it->next(), ++$position ){
     $term = new Word($it->current());
-    $letterSum = $term->getCharSum();
-    $result += $letterSum * $position;
+    $result += $term->getCharSum() * $position;
 }
+
 echo $result;
