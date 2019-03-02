@@ -1,7 +1,11 @@
 <?php
 
 interface iNames {
-    public function getList();
+    public function getSortedList();
+}
+
+interface iWord {
+    public function getCharSum();
 }
 
 class NameList implements iNames {
@@ -24,15 +28,40 @@ class NameList implements iNames {
             $this->contents .= $line;
     }
 
-    public function getList() {
+    public function getSortedList() {
         $this->load();
         $list = explode(',', $this->contents);
         $list = array_map(function ($item){
             return trim($item, '"');
         }, $list);
+        sort($list);
         return $list;
     }
 }
 
-$names = new NameList('p022_names.txt');
-var_dump($names->getList());
+class Word implements iWord {
+    private $term;
+    function __construct(string $term) {
+        $this->term = $term;
+    }
+    function getCharSum() {
+        $term = strtoupper($this->term);
+        $letters = str_split($term);
+        $values = array_map(function ($letter) {
+            return ord($letter) - ord('A') + 1;
+        }, $letters);
+        return array_sum($values);
+    }
+}
+
+$nameList = new NameList('p022_names.txt');
+$nameList = $nameList->getSortedList();
+$result = 0;
+for( $position=1, $it = new ArrayIterator($nameList);
+$it->valid();
+$it->next(), ++$position ){
+    $term = new Word($it->current());
+    $letterSum = $term->getCharSum();
+    $result += $letterSum * $position;
+}
+echo $result;
