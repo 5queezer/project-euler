@@ -1,5 +1,5 @@
 <?php
-https://projecteuler.net/problem=22
+// https://projecteuler.net/problem=22
 
 interface iNames {
     public function getSortedList();
