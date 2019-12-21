@@ -1,5 +1,5 @@
-<?php /*
-https://projecteuler.net/problem=22 */
+<?php /* https://projecteuler.net/problem=22 */
+/* OOP Version */
 
 interface iNames {
     public function getSortedList();
