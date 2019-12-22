@@ -40,8 +40,8 @@ class Hand
   end
 
   def value_of(c)
-    lookup = { :T => 10, :J => 11, :Q => 12, :K => 13, :A => 14 }
-    lookup[c.to_sym] || c.to_i
+    lookup = ->(c) { Hash["TJQKA".chars.zip(10..14)][c] || c.to_i}
+    lookup.call(c)
   end
 
   def is_one_pair?
