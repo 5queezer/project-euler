@@ -39,8 +39,7 @@ class Hand
   end
 
   def value_of(c)
-    lookup = ->(c) { Hash["TJQKA".chars.zip(10..14)][c] }
-    lookup.call(c) || c.to_i
+    Hash["TJQKA".chars.zip(10..14)][c] || c.to_i
   end
 
   def is_one_pair?
