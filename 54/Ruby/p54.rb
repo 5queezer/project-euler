@@ -68,7 +68,7 @@ class Hand
   end
 
   def is_straight?
-    high_card == @values.min + 4
+    @values.uniq.size == 5 && @values.sort.each_cons(2).all? { |x,y| y == x + 1 }
   end
 
   def is_flush?

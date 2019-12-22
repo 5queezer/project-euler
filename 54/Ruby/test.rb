@@ -55,7 +55,13 @@ class TestHands < Test::Unit::TestCase
     hand = Hand.new "2S 8D 8C 4C TS"
     assert_false hand.is_straight?
 
-    hand = Hand.new "6S 7D 8C 9C TS"
+    hand = Hand.new "8D 3S 5D 5C AH"
+    assert_false hand.is_straight?
+
+    hand = Hand.new "9H 4D JC KS JS"
+    assert_false hand.is_straight?
+
+    hand = Hand.new "6S 7D 8C 9C TS".split.shuffle
     assert_true hand.is_straight?
   end
 
