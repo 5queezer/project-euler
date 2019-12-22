@@ -41,10 +41,7 @@ class Hand
 
   def value_of(c)
     lookup = { :T => 10, :J => 11, :Q => 12, :K => 13, :A => 14 }
-    lookup.each_pair do |k, v|
-      return v if c == k.to_s
-    end
-    c.to_i
+    lookup[c.to_sym] || c.to_i
   end
 
   def is_one_pair?
