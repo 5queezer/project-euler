@@ -1,5 +1,7 @@
-require_relative 'p54'
+require_relative 'poker'
 require 'test/unit'
+
+HANDS_FILE = "p054_poker.txt"
 
 class TestHands < Test::Unit::TestCase
   def test_royal_flush
@@ -81,12 +83,20 @@ class TestHands < Test::Unit::TestCase
     assert_true hand.is_two_pairs?
   end
 
-  def one_pair
+  def test_one_pair
     hand = Hand.new "6H JD 9D 6S JH"
     assert_false hand.is_one_pair?
 
     hand = Hand.new "6H TD 9D 6S JH"
     assert_true hand.is_one_pair?
+  end
+
+  def test_equal_hands
+    hand1 = Hand.new "3C 3D 3S 9S 9D"
+    hand2 = Hand.new "3D 3H 3S 9S 9C"
+    assert_raise do
+      hand1 > hand2
+    end
   end
 end
 
@@ -119,5 +129,10 @@ class TestHandsCompare < Test::Unit::TestCase
     h1 = Hand.new "2H 2D 4C 4D 4S"
     h2 = Hand.new "3C 3D 3S 9S 9D"
     assert_compare h1, ">", h2
+  end
+
+  def test_end
+    wins = read_stream File.open(HANDS_FILE)
+    assert_equal wins[0], 376
   end
 end

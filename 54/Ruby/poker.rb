@@ -1,6 +1,5 @@
-require 'open-uri'
-
-HANDS_FILE = "p054_poker.txt"
+# problem 54
+# call with ruby poker.rb p054_poker.txt
 
 class Hand
   def initialize(cards)
@@ -40,8 +39,8 @@ class Hand
   end
 
   def value_of(c)
-    lookup = ->(c) { Hash["TJQKA".chars.zip(10..14)][c] || c.to_i}
-    lookup.call(c)
+    lookup = ->(c) { Hash["TJQKA".chars.zip(10..14)][c] }
+    lookup.call(c) || c.to_i
   end
 
   def is_one_pair?
@@ -57,7 +56,7 @@ class Hand
   end
 
   def is_straight?
-    @values.uniq.size == 5 && @values.sort.each_cons(2).all? { |x,y| y == x + 1 }
+    @values.sort.each_cons(2).all? { |x,y| y == x + 1 }
   end
 
   def is_flush?
@@ -73,9 +72,7 @@ class Hand
   end
 
   def is_straight_flush?
-    return false unless is_flush?
-    diff = Array(@values.min..@values.max) - @values
-    diff.size.zero?
+    is_flush? && is_straight?
   end
 
   def is_royal_flush?
@@ -91,22 +88,28 @@ class Hand
       next if hc1 == hc2
       return hc1 > hc2
     end
+    raise Exception
   end
 end
 
-
-if $0 == __FILE__
-  open(HANDS_FILE, 'w') do |file|
-    # cache the file
-    file << open("https://projecteuler.net/project/resources/#{HANDS_FILE}").read
-  end unless File.file?(HANDS_FILE)
-
+def read_stream stream
   wins1 = 0
-  open(HANDS_FILE).read.each_line do |hands|
+  wins2 = 0
+  stream.read.each_line do |hands|
     hands = hands.split
     pl1 = Hand.new hands[0..4]
     pl2 = Hand.new hands[5..9]
-    wins1 += 1 if pl1 > pl2
+
+    if pl1 > pl2
+      wins1 += 1
+    else
+      wins2 += 1
+    end
   end
-  puts wins1
+  [ wins1, wins2 ]
+end
+
+if $0 == __FILE__
+  wins = read_stream ARGF
+  puts wins[0]
 end
