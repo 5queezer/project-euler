@@ -34,6 +34,12 @@ class TestHands < Test::Unit::TestCase
     assert_false hand.is_full_house?
 
     hand = Hand.new "4C 2C KS 7S TC"
+    assert_false hand.is_full_house?
+
+    hand = Hand.new "2H 2D 4C 4D 4S"
+    assert_true hand.is_full_house?
+
+    hand = Hand.new "3C 3D 3S 9S 9D"
     assert_true hand.is_full_house?
   end
 
@@ -59,9 +65,6 @@ class TestHands < Test::Unit::TestCase
 
     hand = Hand.new "6S TD TC 6C TS"
     assert_false hand.is_three_of_a_kind?
-
-    hand = Hand.new "6S TD TC 8C TS"
-    assert_true hand.is_three_of_a_kind?
   end
 
   def two_pairs
@@ -82,15 +85,33 @@ class TestHands < Test::Unit::TestCase
 end
 
 class TestHandsCompare < Test::Unit::TestCase
-  def test_pair_of_fives
+  def test_1
     h1 = Hand.new "5H 5C 6S 7S KD"
     h2 = Hand.new "2C 3S 8S 8D TD"
+    assert_compare h1, "<", h2
   end
 
-  def test_highest_card
+  def test_2
     h1 = Hand.new "5D 8C 9S JS AC"
     h2 = Hand.new "2C 5C 7D 8S QH"
+    assert_compare h1, ">", h2
+  end
 
+  def test_3
+    h1 = Hand.new "2D 9C AS AH AC"
+    h2 = Hand.new "3D 6D 7D TD QD"
+    assert_compare h1, "<", h2
+  end
+
+  def test_4
+    h1 = Hand.new "4D 6S 9H QH QC"
+    h2 = Hand.new "3D 6D 7H QD QS"
+    assert_compare h1, ">", h2
+  end
+
+  def test_5
+    h1 = Hand.new "2H 2D 4C 4D 4S"
+    h2 = Hand.new "3C 3D 3S 9S 9D"
     assert_compare h1, ">", h2
   end
 end
