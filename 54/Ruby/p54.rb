@@ -3,7 +3,6 @@ require 'open-uri'
 HANDS_FILE = "p054_poker.txt"
 
 class Hand
-  # attr_reader :occurrences
   def initialize(cards)
     cards = cards.split if cards.is_a? String
     abort("5 cards expected") unless cards.length == 5
@@ -24,19 +23,16 @@ class Hand
                           is_straight_flush?
                           is_royal_flush?
     ]
+
     ranking_methods.reverse.each do |method|
       r1 = self.send(method)
       r2 = other.send(method)
-      if r1 && r2
-        high_cards.zip(other.high_cards).each do |hc1, hc2|
-          next if hc1 == hc2
-          return hc1 > hc2
-        end
-      end
+      return comp_high_card(other) if r1 && r2
       return true if r1
       return false if r2
     end
-    self.high_card > other.high_card
+
+    comp_high_card(other)
   end
 
   def <(other)
@@ -49,10 +45,6 @@ class Hand
       return v if c == k
     end
     c.to_i
-  end
-
-  def high_card
-    @values.max
   end
 
   def is_one_pair?
@@ -90,11 +82,18 @@ class Hand
   end
 
   def is_royal_flush?
-    is_straight_flush? and high_card == value_of("A")
+    is_straight_flush? and high_cards[0] == value_of("A")
   end
 
   def high_cards
     @occurrences.map(&:first)
+  end
+
+  def comp_high_card (other)
+    high_cards.zip(other.high_cards).each do |hc1, hc2|
+      next if hc1 == hc2
+      return hc1 > hc2
+    end
   end
 end
 
