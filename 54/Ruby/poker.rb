@@ -20,8 +20,7 @@ class Hand
                           is_full_house?
                           is_four_of_a_kind?
                           is_straight_flush?
-                          is_royal_flush?
-    ]
+                          is_royal_flush? ]
 
     ranking_methods.reverse.each do |method|
       r1 = self.send(method)
