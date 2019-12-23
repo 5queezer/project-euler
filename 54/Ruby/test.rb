@@ -4,45 +4,48 @@ require 'test/unit'
 HANDS_FILE = "p054_poker.txt"
 
 class TestHands < Test::Unit::TestCase
-  def test_royal_flush
-    hand = Hand.new "8C TC KC 9C 4C"
-    assert_false hand.is_royal_flush?
+  def setup
+    @function = nil
+    @set = nil
+  end
 
-    hand = Hand.new "TC JC QC KC AC"
-    assert_true hand.is_royal_flush?
+  def teardown
+    @set&.each do|hand, assertion|
+      hand = Hand.new hand
+      res = hand.send @function
+      if assertion == true
+        assert_true res
+      else
+        assert_false res
+      end
+    end
+  end
+
+  def test_royal_flush
+    @function = "is_royal_flush?"
+    @set = [["8C TC KC 9C 4C", false],
+            ["TC JC QC KC AC", true]]
   end
 
   def test_straight_flush
-    hand = Hand.new "4C 5C 6C 7C TC"
-    assert_false hand.is_straight_flush?
-
-    hand = Hand.new "6C 5C 4C 7C 8C"
-    assert_true hand.is_straight_flush?
+    @function = "is_straight_flush?"
+    @set = [["4C 5C 6C 7C TC", false],
+            ["6C 5C 4C 7C 8C", true]]
   end
 
   def test_four_of_a_kind
-    hand = Hand.new "4C 4D KC TS 4H"
-    assert_false hand.is_four_of_a_kind?
-
-    hand = Hand.new "4C 4D KC 4S 4H"
-    assert_true hand.is_four_of_a_kind?
+    @function = "is_four_of_a_kind?"
+    @set = [["4C 4D KC TS 4H", false],
+            ["4C 4D KC 4S 4H", true]]
   end
 
   def test_full_house
-    hand = Hand.new "4D 2C KC 7S TC"
-    assert_false hand.is_full_house?
-
-    hand = Hand.new "4C 2C KC 7S TC"
-    assert_false hand.is_full_house?
-
-    hand = Hand.new "4C 2C KS 7S TC"
-    assert_false hand.is_full_house?
-
-    hand = Hand.new "2H 2D 4C 4D 4S"
-    assert_true hand.is_full_house?
-
-    hand = Hand.new "3C 3D 3S 9S 9D"
-    assert_true hand.is_full_house?
+    @function = "is_full_house?"
+    @set = [["4D 2C KC 7S TC", false],
+            ["4C 2C KC 7S TC", false],
+            ["4C 2C KS 7S TC", false],
+            ["2H 2D 4C 4D 4S", true],
+            ["3C 3D 3S 9S 9D", true]]
   end
 
   def test_flush
