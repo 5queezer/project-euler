@@ -1,4 +1,4 @@
-func generateFibonacci(threshold: Int = 4_000_000) -> [Int] {
+func generateFibonacci(_ threshold: Int) -> [Int] {
     var fibSeq = [1, 2]
     while true {
         let fibSum = fibSeq.suffix(2).reduce(0,+)
@@ -10,5 +10,5 @@ func generateFibonacci(threshold: Int = 4_000_000) -> [Int] {
     return fibSeq
 }
 
-let result = generateFibonacci().filter{$0 % 2 == 0}.reduce(0,+)
+let result = generateFibonacci(4_000_000).filter{$0 % 2 == 0}.reduce(0,+)
 print(result)
